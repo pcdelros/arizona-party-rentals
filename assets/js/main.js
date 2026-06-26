@@ -12,28 +12,38 @@ window.addEventListener('scroll', updateHeader, { passive: true });
 updateHeader();
 
 navToggle?.addEventListener('click', () => {
-  const isOpen = navMenu.classList.toggle('is-open');
+  const isOpen = navMenu?.classList.toggle('is-open') ?? false;
   navToggle.setAttribute('aria-expanded', String(isOpen));
 });
 
 navMenu?.addEventListener('click', (event) => {
-  if (event.target.matches('a')) {
+  if (event.target instanceof HTMLElement && event.target.matches('a')) {
     navMenu.classList.remove('is-open');
     navToggle?.setAttribute('aria-expanded', 'false');
   }
 });
 
-const revealItems = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    navMenu?.classList.remove('is-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+  }
+});
 
-revealItems.forEach((item) => revealObserver.observe(item));
+const revealItems = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealItems.forEach((item) => revealObserver.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add('is-visible'));
+}
 
 function setError(field, message) {
   const errorEl = document.querySelector(`[data-error-for="${field.name}"]`);
@@ -42,8 +52,9 @@ function setError(field, message) {
 }
 
 function validateForm() {
+  if (!form) return false;
   let isValid = true;
-  const fields = Array.from(form.querySelectorAll('input, textarea'));
+  const fields = Array.from(form.querySelectorAll('input, textarea, select'));
 
   fields.forEach((field) => {
     let message = '';
@@ -51,7 +62,7 @@ function validateForm() {
 
     if (field.required && !value) {
       message = 'Please fill out this field.';
-    } else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    } else if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       message = 'Please enter a valid email address.';
     } else if (field.minLength > 0 && value.length < field.minLength) {
       message = `Please enter at least ${field.minLength} characters.`;
@@ -66,6 +77,7 @@ function validateForm() {
 
 form?.addEventListener('submit', (event) => {
   event.preventDefault();
+  if (!statusEl) return;
   statusEl.textContent = '';
 
   if (!validateForm()) {
@@ -73,6 +85,6 @@ form?.addEventListener('submit', (event) => {
     return;
   }
 
-  statusEl.textContent = 'Request reviewed. Connect this form to a secure form service before publishing.';
+  statusEl.textContent = 'Request reviewed. This demo does not send data yet. Connect the form to a secure form service or backend before publishing.';
   form.reset();
 });
