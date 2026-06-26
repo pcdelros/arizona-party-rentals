@@ -1,74 +1,41 @@
-# Desert Pop Party Rentals Website
+# AZ Party Rentals Website
 
-A lightweight static website for an Arizona-based party rental business. It is designed to run locally, upload to GitHub, and deploy through GitHub Pages.
+Static multi-page website rebuilt from the Notion Website Prompt rules.
 
-## What is included
+## Pages
 
-- `index.html` - Main website page
-- `assets/css/styles.css` - Website styling and responsive layout
-- `assets/js/main.js` - Mobile navigation, scroll reveal, and demo form validation
-- `README.md` - Setup and deployment notes
+- `index.html` — homepage
+- `rentals.html` — rental overview
+- `bounce-houses.html` — bounce house service page
+- `tables-chairs.html` — tables and chairs service page
+- `canopies.html` — canopy and shade service page
+- `delivery.html` — delivery and service area page
+- `blog.html` — lightweight resources page for future SEO content
+- `contact.html` — quote planning and contact placeholder page
+- `privacy.html` — privacy and security notes
 
-## How to run locally
+## Tech
 
-1. Open the project folder.
-2. Double-click `index.html` to preview it in your browser.
-3. For the best local preview, open it with a local server such as the VS Code Live Server extension.
+- HTML
+- CSS
+- JavaScript
+- No build system required
+- GitHub Pages friendly
 
-## Before publishing
+## Launch checklist
 
-Replace the placeholder business details:
+Before publishing as a real business website:
 
-- Business name, if needed
-- Phone number
-- Email address
-- Business hours
-- Service areas
-- Real rental categories and pricing
-- Real photos, if available
+1. Replace placeholder business contact details.
+2. Add real rental photos and inventory names.
+3. Confirm service cities, delivery fees, deposits, and cancellation terms.
+4. Replace the privacy page with a real privacy policy.
+5. Connect quote requests to a trusted form service or backend if online inquiries are needed.
 
-## Contact form note
+## Local preview
 
-The quote form currently validates entries in the browser but does not send messages anywhere. This is intentional so no private email credentials, API keys, or insecure endpoints are exposed in frontend code.
+Open `index.html` in a browser, or use a simple local server:
 
-For a real public form, connect it to a secure form service or backend such as:
+`python -m http.server 8000`
 
-- Formspree
-- Netlify Forms
-- Basin
-- A custom serverless function
-
-Do not place email passwords, private API keys, or tokens in frontend JavaScript.
-
-## GitHub Pages deployment
-
-1. Create a new GitHub repository.
-2. Upload all files from this folder.
-3. In GitHub, go to **Settings** > **Pages**.
-4. Under **Build and deployment**, select:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
-5. Save the settings.
-6. GitHub will provide a public Pages URL after deployment finishes.
-
-## Security notes
-
-This is a static site, so it does not include login, admin pages, databases, hidden dashboards, or server-side code. GitHub Pages has limited support for custom security headers. If you need advanced headers such as Content-Security-Policy or Strict-Transport-Security, use a host that supports custom headers or place the site behind a service that can add them.
-
-Recommended production headers when supported by your host:
-
-```txt
-Content-Security-Policy: default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
-X-Content-Type-Options: nosniff
-Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), microphone=(), geolocation=()
-X-Frame-Options: DENY
-```
-
-## Editing tips
-
-- Keep the site static unless you truly need a backend.
-- Use real photos for trust, but compress them before uploading.
-- Keep rental policies clear and specific.
-- Avoid adding tracking scripts unless you actually need analytics.
+Then visit `http://localhost:8000`.
